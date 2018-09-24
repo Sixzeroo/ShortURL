@@ -34,7 +34,8 @@ func main() {
 
 	r.GET("/:idstr", ParseHandle)
 	r.POST("/", AddHandle)
+	r.GET("/", IndexHandle)
 
-
+	r.LoadHTMLGlob("templates/*")
 	r.Run()
 }

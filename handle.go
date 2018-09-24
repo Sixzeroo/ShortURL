@@ -11,6 +11,10 @@ func Ping(c *gin.Context) {
 	})
 }
 
+func IndexHandle(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", gin.H{})
+}
+
 func AddHandle(c *gin.Context) {
 	url := c.DefaultPostForm("url", "")
 
