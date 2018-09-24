@@ -26,7 +26,13 @@ func AddHandle(c *gin.Context) {
 		return
 	}
 
-	// TODO: 对网址进行检测
+	if !isUrl(url) {
+		c.JSON(200, gin.H{
+			"code": 1,
+			"message": "Invaild url",
+		})
+		return
+	}
 
 	id  := AddUrl(globalDB, url)
 	idStr := Int2Str(id)
