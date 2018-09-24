@@ -1,11 +1,11 @@
 version: "3"
 services:
 
-    webhook:
+    shorturl:
         image: golang
         volumes:
          - ./:/go/src/ShortURL
         working_dir: /go/src/ShortURL
         ports:
-         - "8080:8080"
+         - "18080:8080"
         command: ./run.sh
