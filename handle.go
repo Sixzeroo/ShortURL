@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"fmt"
 	"time"
+	"log"
 )
 
 func Ping(c *gin.Context) {
@@ -40,7 +40,7 @@ func AddHandle(c *gin.Context) {
 	// long url -> short url 缓存
 	idStrValue, err := redisClient2.Get(url).Result()
 	if err != nil {
-		fmt.Printf("error in get redis value : %s\n", err.Error())
+		log.Printf("error in get redis value : %s\n", err.Error())
 	}
 	if idStrValue != "" {
 		c.JSON(200, gin.H{
@@ -56,7 +56,7 @@ func AddHandle(c *gin.Context) {
 
 	err = redisClient2.Set(url, idStr, time.Duration(3600 * 24 * 10) * time.Second).Err()
 	if err != nil {
-		fmt.Printf("error in set redis value : %s\n", err.Error())
+		log.Printf("error in set redis value : %s\n", err.Error())
 	}
 
 	c.JSON(200, gin.H{
@@ -80,7 +80,7 @@ func ParseHandle(c *gin.Context) {
 	// short url -> long url 缓存
 	urlValue, err := redisClient1.Get(idStr).Result()
 	if err != nil {
-		fmt.Printf("error in get redis value : %s\n", err.Error())
+		log.Printf("error in get redis value : %s\n", err.Error())
 	}
 	if urlValue != "" {
 		// 使用302重定向
@@ -94,7 +94,7 @@ func ParseHandle(c *gin.Context) {
 	// 过期时间设置为10天
 	err = redisClient1.Set(idStr, url, time.Duration(3600 * 24 * 10) * time.Second).Err()
 	if err != nil {
-		fmt.Printf("error in set redis value : %s\n", err.Error())
+		log.Printf("error in set redis value : %s\n", err.Error())
 	}
 
 	// 使用302重定向

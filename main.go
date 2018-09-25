@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/Unknwon/goconfig"
 	"github.com/go-redis/redis"
+	"log"
 )
 
 var globalDB *gorm.DB
@@ -16,22 +17,22 @@ func init()  {
 	// 加载配置
 	cfg, err := goconfig.LoadConfigFile("conf/conf.ini")
 	if err != nil {
-		fmt.Printf("config parse error, %s", err.Error())
+		log.Printf("config parse error, %s", err.Error())
 	}
 	mysqlConf, err := cfg.GetSection("mysql")
 	if err != nil {
-		fmt.Printf("config parse error, %s", err.Error())
+		log.Printf("config parse error, %s", err.Error())
 	}
 	// 数据库连接
 	dbDSN := GenMURL(mysqlConf["user"], mysqlConf["passwd"], mysqlConf["host"], mysqlConf["port"], mysqlConf["database"])
 	globalDB, err = gorm.Open("mysql", dbDSN)
 	if err != nil {
-		fmt.Printf("error in db connect, %s", err.Error())
+		log.Printf("error in db connect, %s", err.Error())
 	}
 	// Redis连接
 	redisConf, err := cfg.GetSection("redis")
 	if err != nil {
-		fmt.Printf("redis config parse error %s", err.Error())
+		log.Printf("redis config parse error %s", err.Error())
 	}
 	redisClient1 = redis.NewClient(&redis.Options{
 		Addr:	fmt.Sprintf("%s:%s", redisConf["host"], redisConf["port"]),
